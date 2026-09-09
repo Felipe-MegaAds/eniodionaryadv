@@ -970,6 +970,43 @@ section[id] {
   overflow: visible;
 }
 
+/* Estrutura visual elegante para conter a imagem oficial da seção Sobre */
+.about-image-wrapper {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--gold-border);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+  background: linear-gradient(145deg, #091e3d, #030a16);
+}
+
+/* Camada sutil de degradê inferior sobre a imagem para harmonização visual */
+.about-image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(3, 10, 22, 0.4) 0%, rgba(3, 10, 22, 0) 35%);
+}
+
+/* Fotografia com proporções e enquadramento focados no profissional */
+.about-img {
+  width: 100%;
+  height: 520px;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Efeito refinado de aproximação (zoom suave) ao passar o mouse */
+.about-frame:hover .about-img {
+  transform: scale(1.03);
+}
+
+/* Fallback para ilustrações ou vetores internos */
 .about-inner-art {
   border-radius: 16px;
   overflow: hidden;
@@ -2106,6 +2143,17 @@ section[id] {
     width: calc(100vw - 2.5rem);
     right: 0;
   }
+  /* Otimização da altura da foto do Dr. Enio em telas móveis */
+  .about-img {
+    height: 400px;
+  }
+
+  /* Reposicionamento do selo flutuante de excelência para evitar transbordamento lateral */
+  .about-card-badge {
+    bottom: -15px;
+    right: 10px;
+    padding: 0.75rem 1rem;
+  }
 }
 
 /* Telas Ultracompactas (Menores que 400px) */
@@ -2116,5 +2164,24 @@ section[id] {
 
   .metrics-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Ajuste de proporção da fotografia em telas muito compactas */
+  .about-img {
+    height: 340px;
+  }
+
+  /* Compactação do selo de autoridade em telas muito estreitas */
+  .about-card-badge {
+    right: 0;
+    bottom: -15px;
+    padding: 0.6rem 0.8rem;
+    gap: 0.6rem;
+  }
+
+  /* Redução do ícone do selo em dispositivos compactos */
+  .gold-seal {
+    width: 36px;
+    height: 36px;
   }
 }
