@@ -1,0 +1,2120 @@
+/* ==========================================================================
+   PROJETO: ENIO DIONARY ADVOCACIA - DIREITO DE TRÂNSITO
+   ARQUIVO: CSS/STYLE.CSS
+   ESTILO: LUXO REFINADO, CORES AZUL CLARO, BRANCO E DOURADO
+   100% VANILLA CSS - SEM DEPENDÊNCIAS EXTERNAS - CÓDIGO AMPLAMENTE COMENTADO
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. VARIÁVEIS GLOBAIS (DESIGN TOKENS)
+   Definição da paleta de cores nobre, tipografia e espaçamentos do projeto
+   -------------------------------------------------------------------------- */
+:root {
+  /* Paleta Nobre: Azul Profundo, Azul Claro e Céu Refinado */
+  --bg-dark-primary: #050e1d;        /* Fundo escuro principal de contraste luxuoso */
+  --bg-dark-secondary: #08162b;      /* Fundo de cartões e blocos de suporte */
+  --bg-dark-surface: #0e2241;        /* Superfície com elevação intermediária */
+  --blue-azure: #0ea5e9;             /* Azul claro vibrante e moderno */
+  --blue-sky-light: #38bdf8;         /* Azul celeste luminoso para detalhes e glows */
+  --blue-ice: #e0f2fe;               /* Azul gelo sutil para fundos translúcidos */
+
+  /* Paleta Nobre: Dourado Metálico e Champagne */
+  --gold-primary: #d4af37;           /* Dourado clássico metálico */
+  --gold-light: #f7e29c;             /* Dourado claro brilhante */
+  --gold-dark: #996515;              /* Dourado profundo / bronze */
+  --gold-gradient: linear-gradient(135deg, #fff3c4 0%, #d4af37 50%, #996515 100%);
+  --gold-gradient-glow: linear-gradient(135deg, #f7e29c 0%, #eab308 100%);
+  --gold-border: rgba(212, 175, 55, 0.35);
+
+  /* Tons Neutros e Brancos */
+  --white: #ffffff;
+  --off-white: #f8fafc;
+  --text-main: #f1f5f9;              /* Texto principal de altíssima legibilidade */
+  --text-muted: #94a3b8;             /* Texto secundário/apoio */
+  --text-accent: #7dd3fc;            /* Texto de destaque em tom azul celeste */
+
+  /* Efeitos de Vidro (Glassmorphism) e Sombras de Luxo */
+  --glass-bg: rgba(14, 34, 65, 0.65);
+  --glass-border: rgba(56, 189, 248, 0.15);
+  --glass-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  --card-hover-shadow: 0 20px 40px rgba(14, 165, 233, 0.12), 0 0 25px rgba(212, 175, 55, 0.15);
+
+  /* Tipografia */
+  --font-heading: 'Cinzel', serif, Georgia, 'Times New Roman';
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Transições Suaves */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET MODERNO E CONFIGURAÇÃO BASE
+   Garante consistência perfeita entre navegadores e performance máxima
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-dark-primary);
+  color: var(--text-main);
+  line-height: 1.65;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   3. CONTAINER E TIPOGRAFIA AUXILIAR
+   Estrutura de grid e títulos reutilizáveis
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.section-padding {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  position: relative;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.section-header {
+  max-width: 800px;
+  margin: 0 auto 4rem auto;
+}
+
+.section-pretitle {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue-sky-light);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 2.3vw, 1.95rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 0.925rem;
+  margin-top: 0.875rem;
+  line-height: 1.65;
+}
+
+/* Divisor Dourado Nobre */
+.gold-divider {
+  width: 70px;
+  height: 3px;
+  background: var(--gold-gradient);
+  margin: 1.25rem auto 1rem auto;
+  border-radius: 2px;
+}
+
+.gold-divider.left-align {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* --------------------------------------------------------------------------
+   4. BOTÕES E ELEMENTOS DE AÇÃO (CTAS DE ALTA CONVERSÃO)
+   Efeito Shimmer (brilho dourado) e animações de alta taxa de clique
+   -------------------------------------------------------------------------- */
+
+/* 
+   REGRA CRÍTICA PARA O GTM / GOOGLE ADS:
+   pointer-events: none em todos os elementos filhos (spans, textos, svgs, paths)
+   dos botões. Dessa forma, o clique é SEMPRE registrado no link/botão pai (.elementor-button),
+   evitando que o GTM capture elementos internos e perca a conversão.
+*/
+.btn *,
+.elementor-button *,
+.service-link *,
+.bubble-btn-cta *,
+.whatsapp-floating-button *,
+.gtm-trackable * {
+  pointer-events: none !important;
+}
+
+/* Classe unificada solicitada para marcação e traqueamento via GTM/Google Ads */
+.elementor-button {
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.875rem 1.625rem;
+  letter-spacing: 0.02em;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Botão Dourado Principal (Shimmer Effect) */
+.btn-primary-gold {
+  background: var(--gold-gradient);
+  color: #030a14;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(255, 243, 196, 0.6);
+}
+
+.btn-primary-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.55), 0 0 15px rgba(255, 255, 255, 0.3);
+  color: #000;
+}
+
+/* Efeito de feixe de luz reflexivo que desliza pelo botão */
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  animation: shimmerMove 3.5s infinite;
+}
+
+@keyframes shimmerMove {
+  0% { left: -60%; }
+  35% { left: 130%; }
+  100% { left: 130%; }
+}
+
+.btn-large {
+  padding: 1.125rem 2.25rem;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+}
+
+/* Botão Outline Azul Celeste */
+.btn-outline-cyan {
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: var(--blue-sky-light);
+  backdrop-filter: blur(8px);
+}
+
+.btn-outline-cyan:hover {
+  background: rgba(14, 165, 233, 0.2);
+  border-color: var(--blue-sky-light);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.2);
+}
+
+/* Botão Outline Dourado */
+.btn-outline-gold {
+  background: rgba(212, 175, 55, 0.06);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-light);
+}
+
+.btn-outline-gold:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--gold-primary);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Compensação de rolagem para todas as seções com ID para não cobrir títulos com o header fixo */
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+/* --------------------------------------------------------------------------
+   5. CABEÇALHO FIXO (HEADER) DE ALTO PADRÃO
+   Efeito blur no scroll, monograma dourado e navegação responsiva
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10000;
+  transition: background-color var(--transition-base), backdrop-filter var(--transition-base), box-shadow var(--transition-base), padding var(--transition-base);
+  padding: 1.15rem 0;
+  background: rgba(5, 14, 29, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+/* Estado de rolagem dinâmico acionado pelo JS */
+.site-header.scrolled {
+  padding: 0.75rem 0;
+  background: rgba(5, 14, 29, 0.96);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Logomarca Oficial do Escritório no Cabeçalho */
+.brand-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.header-logo-img {
+  max-height: 48px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  transition: transform var(--transition-base), filter var(--transition-base), max-height var(--transition-base);
+}
+
+.site-header.scrolled .header-logo-img {
+  max-height: 40px;
+}
+
+.brand-logo:hover .header-logo-img {
+  transform: scale(1.03);
+  filter: drop-shadow(0 4px 14px rgba(212, 175, 55, 0.35));
+}
+
+/* Links de Navegação Desktop */
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  list-style: none;
+}
+
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #cbd5e1;
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color var(--transition-fast);
+  text-decoration: none;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--gold-gradient);
+  transition: width var(--transition-base);
+}
+
+.nav-link:hover {
+  color: var(--white);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Ocultar CTA mobile no desktop */
+.mobile-nav-cta {
+  display: none;
+}
+
+/* Botão de WhatsApp no Header Desktop */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-header-cta {
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #ffffff;
+  padding: 0.625rem 1.125rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.btn-header-cta .icon-btn-whatsapp {
+  color: #25D366;
+}
+
+.btn-header-cta:hover {
+  background: rgba(14, 165, 233, 0.25);
+  border-color: var(--blue-sky-light);
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+}
+
+/* Botão Toggle do Menu Mobile com visual refinado */
+.mobile-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 32px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10001;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-toggle .bar {
+  width: 100%;
+  height: 2.2px;
+  background-color: var(--gold-light);
+  border-radius: 2px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  transform-origin: center;
+}
+
+/* Animação para cruz (X) ao abrir o menu mobile */
+.mobile-toggle.active .bar-1 {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.mobile-toggle.active .bar-2 {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.mobile-toggle.active .bar-3 {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
+/* --------------------------------------------------------------------------
+   6. HERO SECTION (ACIMA DA DOBRA)
+   Imagem oficial (hero.png) com layout perfeitamente calibrado e sem invasão visual
+   -------------------------------------------------------------------------- */
+.hero-section {
+  min-height: 100vh;
+  padding-top: 8rem;
+  padding-bottom: 5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #030a16;
+  background-image: url('../assets/hero.png');
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: cover;
+}
+
+/* Camada de overlay lateral e inferior para dar máximo contraste ao texto sem escurecer a foto do advogado */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(3, 10, 22, 0.94) 0%,
+    rgba(3, 10, 22, 0.85) 40%,
+    rgba(3, 10, 22, 0.35) 62%,
+    rgba(3, 10, 22, 0) 80%
+  ),
+  linear-gradient(
+    to top,
+    rgba(3, 10, 22, 0.98) 0%,
+    rgba(3, 10, 22, 0.4) 20%,
+    rgba(3, 10, 22, 0) 45%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Estrutura da Seção Hero alinhada sobre a área livre à esquerda com z-index acima do overlay */
+.hero-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+/* Container de conteúdo textual e ações da hero com largura calibrada para não invadir o advogado */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 560px;
+  width: 100%;
+}
+
+/* Badge Dourado de destaque de autoridade */
+.badge-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid var(--gold-border);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.12em;
+  margin-bottom: 1.5rem;
+}
+
+/* Ícone dentro do badge dourado */
+.badge-icon {
+  color: var(--gold-primary);
+}
+
+/* Título principal persuasivo da hero alinhado à esquerda */
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.85rem, 3vw, 2.65rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--white);
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+  text-align: left;
+}
+
+/* Destaque cromado com gradiente dourado */
+.highlight-gold {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Subtítulo explicativo com largura de leitura ideal */
+.hero-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+  margin-bottom: 1.75rem;
+  text-align: left;
+  max-width: 620px;
+}
+
+/* Lista de benefícios rápidos com alinhamento interno à esquerda */
+.hero-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+  text-align: left;
+}
+
+/* Item individual da lista de benefícios */
+.highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  color: #e2e8f0;
+}
+
+/* Ícone circular de checagem dos itens de benefício */
+.check-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.2);
+  border: 1px solid var(--blue-sky-light);
+  color: var(--blue-sky-light);
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Grupo de botões de chamada para ação (CTAs) alinhado à esquerda */
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* Animação suave para a seta do botão principal */
+.btn-arrow {
+  transition: transform var(--transition-fast);
+}
+
+/* Efeito hover de avanço da seta */
+.btn-primary-gold:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* Barra de selos de confiança e conformidade jurídica alinhada à esquerda */
+.hero-trust-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Item individual de conformidade/segurança */
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* Ponto de marcação visual dos itens de segurança */
+.trust-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-primary);
+}
+
+/* Card Visual de Autoridade Flutuante */
+.hero-visual {
+  position: relative;
+}
+
+.hero-glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2.25rem;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-accent-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gold-gradient);
+}
+
+.card-header-visual {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.shield-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+
+.card-tag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--blue-sky-light);
+  display: block;
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--white);
+}
+
+.card-body-text {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+}
+
+/* Grid de Métricas / Estatísticas */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.metric-box {
+  background: rgba(5, 14, 29, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.metric-box:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold-border);
+}
+
+.metric-num {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  display: block;
+  line-height: 1.2;
+}
+
+.metric-label {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Box de Chamado de Urgência */
+.urgent-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+}
+
+.urgent-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 10px #22c55e;
+  margin-top: 5px;
+  flex-shrink: 0;
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+.urgent-text {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #e2e8f0;
+}
+
+.urgent-text strong {
+  display: block;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   7. SEÇÃO DE SERVIÇOS / ÁREAS DE ATUAÇÃO
+   Cards sofisticados com bordas finas e microinteração
+   -------------------------------------------------------------------------- */
+.services-section {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.services-section .section-pretitle {
+  color: #0284c7;
+}
+
+.services-section .section-title {
+  color: #0b1f3b;
+}
+
+.services-section .section-subtitle {
+  color: #475569;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.service-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+  transition: background var(--transition-base);
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 16px 36px rgba(11, 31, 59, 0.08), 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.service-card:hover::before {
+  background: var(--gold-gradient);
+}
+
+.service-icon-wrap {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  color: #0284c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  transition: all var(--transition-base);
+}
+
+.service-card:hover .service-icon-wrap {
+  background: var(--gold-gradient);
+  color: #030a14;
+  border-color: transparent;
+  transform: scale(1.05);
+}
+
+.service-name {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0b1f3b;
+  line-height: 1.35;
+  margin-bottom: 0.875rem;
+}
+
+.service-desc {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.service-features {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 0.875rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.service-features li {
+  font-size: 0.8125rem;
+  color: #334155;
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.service-features li::before {
+  content: '•';
+  color: var(--gold-primary);
+  font-size: 1.125rem;
+  position: absolute;
+  left: 0;
+  top: -2px;
+}
+
+.service-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #b48c1e;
+  transition: gap var(--transition-fast), color var(--transition-fast);
+}
+
+.service-link:hover {
+  color: #0284c7;
+  gap: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   8. SEÇÃO SOBRE O ESCRITÓRIO & ADVOGADO
+   Visual com composição vetorial de balança de luxo
+   -------------------------------------------------------------------------- */
+.about-section {
+  background: var(--bg-dark-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-container {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.about-visual {
+  position: relative;
+}
+
+.about-frame {
+  position: relative;
+  border-radius: 16px;
+  overflow: visible;
+}
+
+.about-inner-art {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--gold-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.law-art-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Selo Flutuante de Excelência */
+.about-card-badge {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background: var(--bg-dark-surface);
+  border: 1px solid var(--gold-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+.gold-seal {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gold-gradient);
+  color: #030a14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.seal-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.seal-text strong {
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+}
+
+.seal-text span {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.about-lead {
+  font-size: 0.975rem;
+  line-height: 1.7;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.about-text {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* Pilares da Atuação */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+}
+
+.pillar-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  background: rgba(14, 34, 65, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1.125rem;
+}
+
+.pillar-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(14, 165, 233, 0.15);
+  color: var(--blue-sky-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pillar-info h4 {
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  color: var(--white);
+  margin-bottom: 0.25rem;
+}
+
+.pillar-info p {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   9. SEÇÃO DE DIFERENCIAIS EXCLUSIVOS
+   Numeração imponente e cartões de alta distinção
+   -------------------------------------------------------------------------- */
+.differentials-section {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.differentials-section .section-pretitle {
+  color: #0284c7;
+}
+
+.differentials-section .section-title {
+  color: #0b1f3b;
+}
+
+.differentials-section .section-subtitle {
+  color: #475569;
+}
+
+.differentials-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.diff-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 2.25rem 1.5rem;
+  position: relative;
+  transition: all var(--transition-base);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.diff-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 16px 36px rgba(11, 31, 59, 0.08), 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.diff-num {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: rgba(11, 31, 59, 0.05);
+  line-height: 1;
+  transition: color var(--transition-base);
+}
+
+.diff-card:hover .diff-num {
+  color: rgba(212, 175, 55, 0.25);
+}
+
+.diff-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  color: #0284c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  transition: all var(--transition-base);
+}
+
+.diff-card:hover .diff-icon {
+  background: var(--gold-gradient);
+  border-color: transparent;
+  color: #030a14;
+}
+
+.diff-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0b1f3b;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.diff-text {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.6;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* --------------------------------------------------------------------------
+   10. CTA BANNER INTERMEDIÁRIO DE CONVERSÃO
+   Faixa imersiva para recuperar visitantes com urgência de prazo
+   -------------------------------------------------------------------------- */
+.cta-banner-section {
+  padding: 2rem 0;
+  position: relative;
+  background: var(--bg-dark-primary);
+}
+
+.cta-banner-card {
+  background: linear-gradient(135deg, #092040 0%, #061327 100%);
+  border: 1px solid var(--gold-border);
+  border-radius: 18px;
+  padding: 3.5rem 3rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(14, 165, 233, 0.08);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.cta-banner-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cta-banner-content {
+  max-width: 820px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  margin-bottom: 1.25rem;
+}
+
+.cta-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.cta-text {
+  font-size: 0.925rem;
+  color: #cbd5e1;
+  line-height: 1.65;
+  margin-bottom: 2rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   11. SEÇÃO DE PERGUNTAS FREQUENTES (FAQ)
+   Acordeão com fundo branco claro refinado e texto justificado
+   -------------------------------------------------------------------------- */
+.faq-section {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.faq-section .section-pretitle {
+  color: #0284c7;
+}
+
+.faq-section .section-title {
+  color: #0b1f3b;
+}
+
+.faq-section .section-subtitle {
+  color: #475569;
+}
+
+.faq-accordion-container {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
+}
+
+.faq-item.active {
+  background: #ffffff;
+  border-color: rgba(212, 175, 55, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.faq-trigger {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+  background: transparent;
+  color: #0b1f3b;
+}
+
+.faq-question {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: color var(--transition-fast);
+}
+
+.faq-item.active .faq-question {
+  color: #b48c1e;
+}
+
+.faq-icon-indicator {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: #0284c7;
+  line-height: 1;
+  transition: transform var(--transition-base), color var(--transition-base);
+  flex-shrink: 0;
+}
+
+.faq-item.active .faq-icon-indicator {
+  transform: rotate(45deg);
+  color: var(--gold-primary);
+}
+
+.faq-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-content-inner {
+  padding: 0 1.5rem 1.25rem 1.5rem;
+  color: #334155;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 0.875rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* --------------------------------------------------------------------------
+   12. SEÇÃO DE LOCALIZAÇÃO COM GOOGLE MAPS & CONTATO
+   Fundo branco na seção, card azul de luxo para os Dados de Atendimento e mapa integrado
+   -------------------------------------------------------------------------- */
+.location-section {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.location-section .section-pretitle {
+  color: #0284c7;
+}
+
+.location-section .section-title {
+  color: #0b1f3b;
+}
+
+.location-section .section-subtitle {
+  color: #475569;
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+/* Card Azul Nobre para os Dados de Atendimento */
+.location-info-card {
+  background: linear-gradient(135deg, #092040 0%, #051329 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 14px;
+  padding: 2.5rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 36px rgba(9, 32, 64, 0.18), 0 0 20px rgba(212, 175, 55, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.location-info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gold-gradient);
+}
+
+.location-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.location-card-subtitle {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin-bottom: 2rem;
+}
+
+.contact-data-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+}
+
+.contact-data-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.data-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--blue-sky-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.data-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.data-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+
+.data-val, .data-link {
+  font-size: 0.9375rem;
+  color: var(--white);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.data-link:hover {
+  color: var(--gold-light);
+}
+
+/* Moldura e Wrapper do Google Maps sobre o fundo branco */
+.location-map-wrapper {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  min-height: 400px;
+}
+
+.google-map-frame {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   13. RODAPÉ (FOOTER) INSTITUCIONAL DE LUXO
+   Informações corporativas e conformidade ética
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background: #020710;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 4.5rem;
+  position: relative;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr 1.1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3.5rem;
+}
+
+.footer-brand {
+  margin-bottom: 1.25rem;
+}
+
+.footer-logo-img {
+  max-height: 56px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.footer-bio {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.footer-social-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.social-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.social-icon:hover {
+  background: var(--gold-gradient);
+  color: #030a14;
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+.footer-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.25rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 25px;
+  height: 2px;
+  background: var(--gold-primary);
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links a {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: color var(--transition-fast), padding-left var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--gold-light);
+  padding-left: 4px;
+}
+
+.footer-contact-item {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.footer-contact-item strong {
+  color: #e2e8f0;
+}
+
+.footer-contact-item a:hover {
+  color: var(--gold-light);
+}
+
+/* Barra de Direitos e OAB Disclaimer */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.75rem 0;
+  background: #01040a;
+}
+
+.footer-bottom-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.copyright-text {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.oab-disclaimer {
+  font-size: 0.6875rem;
+  color: #64748b;
+  max-width: 600px;
+  text-align: right;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   14. WIDGET FLUTUANTE DO WHATSAPP COM BALÃO INTERATIVO
+   Hover revelador, máscara circular da logo e pulso
+   -------------------------------------------------------------------------- */
+.whatsapp-floating-widget {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Balão Interativo (Chat Bubble) */
+.whatsapp-chat-bubble {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 0;
+  width: 310px;
+  background: #08162b;
+  border: 1px solid var(--gold-border);
+  border-radius: 14px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.95);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Revelação no hover do widget ou classe active adicionada via JS */
+.whatsapp-floating-widget:hover .whatsapp-chat-bubble,
+.whatsapp-chat-bubble.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.chat-bubble-header {
+  background: linear-gradient(135deg, #092040 0%, #061327 100%);
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+/* Máscara de Círculo com Monograma */
+.bubble-avatar-wrapper {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.bubble-avatar-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--gold-primary);
+  background: #081A35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bubble-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.online-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #08162b;
+}
+
+.bubble-meta {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.bubble-name {
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.bubble-status {
+  font-size: 0.6875rem;
+  color: var(--blue-sky-light);
+}
+
+.bubble-close-btn {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 2px;
+  transition: color var(--transition-fast);
+}
+
+.bubble-close-btn:hover {
+  color: var(--white);
+}
+
+.chat-bubble-body {
+  padding: 1.125rem 1rem;
+  background: rgba(5, 14, 29, 0.85);
+}
+
+.bubble-message {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #e2e8f0;
+}
+
+.bubble-message strong {
+  color: var(--gold-light);
+}
+
+.bubble-time {
+  display: block;
+  text-align: right;
+  font-size: 0.625rem;
+  color: var(--text-muted);
+  margin-top: 0.375rem;
+}
+
+.chat-bubble-footer {
+  padding: 0.75rem 1rem;
+  background: #08162b;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bubble-btn-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #25D366;
+  color: #FFFFFF;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 0.625rem;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.bubble-btn-cta:hover {
+  background: #20BA5A;
+  transform: translateY(-1px);
+}
+
+/* Botão Redondo Principal */
+.whatsapp-floating-button {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45);
+  position: relative;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.whatsapp-floating-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 14px 32px rgba(37, 211, 102, 0.6);
+}
+
+/* Ondas de Pulso */
+.pulse-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  animation: pulseRings 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  pointer-events: none;
+}
+
+.pulse-ring.delay {
+  animation-delay: 1.2s;
+}
+
+@keyframes pulseRings {
+  0% { transform: scale(0.9); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   15. ANIMAÇÕES DE REVEAL AO ROLAR A PÁGINA (SCROLL OBSERVER)
+   Transições com aceleração por hardware (GPU)
+   -------------------------------------------------------------------------- */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   16. DESIGN RESPONSIVO E MEDIA QUERIES (MOBILE, TABLET E DESKTOP)
+   Adaptação impecável para qualquer formato de tela
+   -------------------------------------------------------------------------- */
+
+/* Telas Grandes e Médias (Até 1024px) */
+@media (max-width: 1024px) {
+  /* No tablet, ajusta posicionamento da hero */
+  .hero-section {
+    background-position: 80% top;
+  }
+
+  .hero-content {
+    max-width: 520px;
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-container {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  .differentials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .location-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* Transição para Menu Hambúrguer (Até 992px) */
+@media (max-width: 992px) {
+  /* Exibição do botão hambúrguer no cabeçalho */
+  .mobile-toggle {
+    display: flex;
+  }
+
+  /* Menu Mobile encapsulado abaixo do header sem vazamentos visuais quando fechado */
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(4, 14, 30, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--gold-border);
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                padding 0.35s ease,
+                opacity 0.25s ease,
+                visibility 0.25s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+  }
+
+  /* Estado aberto do Menu Mobile */
+  .main-nav.nav-open {
+    max-height: 520px;
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    overflow-y: auto;
+  }
+
+  /* Lista de links verticais no mobile */
+  .nav-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.15rem;
+    width: 100%;
+  }
+
+  .nav-item {
+    width: 100%;
+  }
+
+  .nav-link {
+    font-size: 1.05rem;
+    padding: 0.5rem 0;
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-link::after {
+    display: none;
+  }
+
+  /* Botão CTA dentro do menu mobile */
+  .mobile-nav-cta {
+    display: block;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.25);
+    width: 100%;
+  }
+
+  .mobile-nav-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Oculta o botão do cabeçalho para dar espaço à logo e ao botão hambúrguer */
+  .header-actions .btn-header-cta {
+    display: none;
+  }
+}
+
+/* Tablets e Celulares (Até 768px) */
+@media (max-width: 768px) {
+  /* Seção Hero no mobile com espaçamento superior para a imagem começar abaixo do header fixo */
+  .hero-section {
+    min-height: auto;
+    padding-top: 5.5rem;
+    padding-bottom: 4.5rem;
+    background-image: url('../assets/mobile.png');
+    background-position: center 85px;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-color: #030a16;
+  }
+
+  /* Overlay degradê reposicionado para acompanhar o espaçamento da imagem e manter a foto limpa */
+  .hero-section::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(3, 10, 22, 0) 0%,
+      rgba(3, 10, 22, 0) 330px,
+      rgba(3, 10, 22, 0.78) 420px,
+      rgba(3, 10, 22, 0.96) 500px,
+      rgba(3, 10, 22, 1) 100%
+    );
+  }
+
+  /* Alinhamento centralizado do container da hero */
+  .hero-container {
+    justify-content: center;
+  }
+
+  /* Espaçamento superior que posiciona a copy logo abaixo da imagem do Dr. Enio com folga do header */
+  .hero-content {
+    margin-top: clamp(340px, calc(72vw + 85px), 450px);
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  /* Ajuste de tamanho do título no mobile */
+  .hero-title {
+    font-size: clamp(1.45rem, 5.5vw, 1.85rem);
+    text-align: center;
+  }
+
+  /* Ajuste da descrição no mobile */
+  .hero-description {
+    font-size: 0.925rem;
+    text-align: center;
+  }
+
+  /* Alinhamento dos benefícios no mobile */
+  .hero-highlights {
+    align-items: flex-start;
+    text-align: left;
+    display: inline-flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+  }
+
+  /* Centralização dos botões da hero */
+  .hero-cta-group {
+    justify-content: center;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Centralização da barra de confiança */
+  .hero-trust-bar {
+    justify-content: center;
+  }
+
+  .section-padding {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .differentials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-banner-card {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom-flex {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .oab-disclaimer {
+    text-align: center;
+  }
+
+  .whatsapp-floating-widget {
+    bottom: 1.25rem;
+    right: 1.25rem;
+  }
+
+  .whatsapp-floating-button {
+    width: 56px;
+    height: 56px;
+  }
+
+  .whatsapp-chat-bubble {
+    width: calc(100vw - 2.5rem);
+    right: 0;
+  }
+}
+
+/* Telas Ultracompactas (Menores que 400px) */
+@media (max-width: 400px) {
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
