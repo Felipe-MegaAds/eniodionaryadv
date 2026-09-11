@@ -186,20 +186,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ------------------------------------------------------------------------
   // 5. WIDGET FLUTUANTE DO WHATSAPP E BALÃO DE ATENDIMENTO
-  // Apresentação inteligente com delay e fechamento imediato no botão X
+  // Apresentação inteligente com delay e fechamento à prova de falhas para iOS Safari e Android
   // ------------------------------------------------------------------------
   function initWhatsappFloatingWidget() {
-    // Captura dos elementos do DOM do widget flutuante
+    // Captura dos elementos do DOM do widget flutuante e balão
     const whatsappWidget = document.getElementById('whatsappWidget');
     const whatsappBubble = document.getElementById('whatsappBubble');
     const bubbleCloseBtn = document.getElementById('bubbleCloseBtn');
     const chatTime = document.getElementById('chatTime');
     const floatingBtn = document.getElementById('floatingWhatsappBtn');
 
-    // Se os elementos essenciais não existirem, encerra a execução com segurança
+    // Se os elementos essenciais não existirem na página, encerra a execução com segurança
     if (!whatsappWidget || !whatsappBubble) return;
 
-    // Atualiza o horário atual da mensagem no balão de chat
+    // Estado local em memória para controlar se o balão foi fechado pelo usuário nesta sessão
+    let isBubbleDismissed = false;
+
+    // Leitura segura do sessionStorage com tratamento de erro (necessário para Safari no modo Navegação Privada)
+    try {
+      if (sessionStorage.getItem('whatsapp_bubble_closed') === 'true') {
+        isBubbleDismissed = true;
+      }
+    } catch (storageErr) {
+      // Ignora restrição de armazenamento em navegadores que bloqueiam cookies/storage de terceiros
+    }
+
+    // Atualiza o horário atual exibido na mensagem do balão de chat
     if (chatTime) {
       const now = new Date();
       const hours = String(now.getHours()).padStart(2, '0');
@@ -207,59 +219,81 @@ document.addEventListener('DOMContentLoaded', () => {
       chatTime.textContent = `${hours}:${minutes}`;
     }
 
-    // Função que exibe o balão de atendimento
+    // Função para abrir o balão de atendimento caso ele não tenha sido dispensado pelo usuário
     function openBubble() {
+      if (isBubbleDismissed) return;
       whatsappBubble.classList.remove('is-closed');
       whatsappBubble.classList.add('active');
       whatsappBubble.setAttribute('aria-hidden', 'false');
     }
 
-    // Função que fecha o balão imediatamente tanto em dispositivos móveis quanto desktop
-    function closeBubble(e) {
+    // Função global que fecha o balão imediatamente em qualquer evento (click, touchend, pointerdown ou inline)
+    window.closeWhatsappBubble = function(e) {
+      // Interrompe a propagação do evento para evitar que o clique atinja elementos subjacentes
       if (e) {
-        e.stopPropagation();
-        e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+        if (typeof e.preventDefault === 'function') e.preventDefault();
       }
+
+      // Marca o estado local como dispensado para que timers não reabram o balão
+      isBubbleDismissed = true;
+
+      // Altera as classes CSS para ocultação imediata (forçando display: none via classe .is-closed)
       whatsappBubble.classList.remove('active');
       whatsappBubble.classList.add('is-closed');
       whatsappBubble.setAttribute('aria-hidden', 'true');
-      // Grava no sessionStorage para não reabrir automaticamente na mesma sessão de navegação
-      sessionStorage.setItem('whatsapp_bubble_closed', 'true');
-    }
 
-    // Abre o balão automaticamente após 4 segundos caso ainda não tenha sido fechado pelo usuário
-    let hasAutoOpened = false;
-    setTimeout(() => {
-      if (!hasAutoOpened && !sessionStorage.getItem('whatsapp_bubble_closed')) {
+      // Tenta gravar no sessionStorage para persistir a escolha durante a navegação entre abas
+      try {
+        sessionStorage.setItem('whatsapp_bubble_closed', 'true');
+      } catch (err) {
+        // Fallback silencioso para ambientes com restrição de privacidade no iOS
+      }
+    };
+
+    // Abre o balão automaticamente após 4 segundos para incentivar a conversão do usuário
+    let autoOpenTimer = setTimeout(() => {
+      if (!isBubbleDismissed) {
         openBubble();
-        hasAutoOpened = true;
       }
     }, 4000);
 
-    // Adiciona ouvintes de evento ao botão X (click e touchend para resposta instantânea no mobile)
+    // Adiciona ouvintes para múltiplos tipos de evento de toque e clique no botão X (iOS Safari, WebKit, Touch)
     if (bubbleCloseBtn) {
-      bubbleCloseBtn.addEventListener('click', closeBubble);
-      bubbleCloseBtn.addEventListener('touchend', closeBubble, { passive: false });
+      const touchEvents = ['click', 'touchend', 'pointerdown'];
+      touchEvents.forEach((evtName) => {
+        bubbleCloseBtn.addEventListener(evtName, (e) => {
+          window.closeWhatsappBubble(e);
+        }, { passive: false });
+      });
     }
 
-    // No desktop, ao mover o cursor para fora do widget, limpa a classe temporária 'is-closed' caso não haja bloqueio na sessão
-    whatsappWidget.addEventListener('mouseleave', () => {
-      if (!sessionStorage.getItem('whatsapp_bubble_closed')) {
-        whatsappBubble.classList.remove('is-closed');
+    // Fecha o balão se o usuário tocar fora dele em telas móveis (comportamento nativo de boa usabilidade)
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768 && whatsappBubble.classList.contains('active')) {
+        // Se o clique não foi originado dentro do widget, fecha o balão
+        if (!whatsappWidget.contains(e.target)) {
+          window.closeWhatsappBubble(e);
+        }
       }
     });
 
-    // Suporte a toque no botão principal do WhatsApp no dispositivo móvel
-    if (floatingBtn && window.innerWidth <= 768) {
+    // Suporte ao botão flutuante principal do WhatsApp em telas mobile
+    if (floatingBtn) {
       floatingBtn.addEventListener('click', (e) => {
-        // Verifica se o balão está fechado no momento do toque
-        const isClosed = !whatsappBubble.classList.contains('active') || whatsappBubble.classList.contains('is-closed');
-        if (isClosed) {
-          // Se estiver fechado, previne redirecionamento imediato e abre o balão de atendimento
-          e.preventDefault();
-          openBubble();
+        if (window.innerWidth <= 768) {
+          // Verifica se o balão está invisível no momento do toque
+          const isCurrentlyVisible = whatsappBubble.classList.contains('active') && !whatsappBubble.classList.contains('is-closed');
+
+          // Se estiver invisível, previne o redirecionamento imediato e abre o balão
+          if (!isCurrentlyVisible) {
+            e.preventDefault();
+            // Permite ao usuário reabrir o balão caso toque intencionalmente no botão verde
+            isBubbleDismissed = false;
+            openBubble();
+          }
+          // Caso já esteja aberto, o segundo toque direciona para o link oficial do WhatsApp normalmente
         }
-        // Se já estiver aberto, o clique direciona para o link oficial do WhatsApp normalmente
       });
     }
   }

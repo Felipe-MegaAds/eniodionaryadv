@@ -1688,7 +1688,7 @@ section[id] {
   align-items: flex-end;
 }
 
-/* Balão Interativo (Chat Bubble) */
+/* Balão Interativo (Chat Bubble) do WhatsApp */
 .whatsapp-chat-bubble {
   position: absolute;
   bottom: calc(100% + 14px);
@@ -1701,12 +1701,13 @@ section[id] {
   opacity: 0;
   visibility: hidden;
   transform: translateY(12px) scale(0.95);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
   overflow: hidden;
+  z-index: 1000;
 }
 
-/* Revelação do balão no hover apenas em navegadores com suporte a hover real (desktop/mouse) */
+/* Revelação do balão no hover apenas em navegadores desktop com suporte a ponteiro fino */
 @media (hover: hover) and (pointer: fine) {
   .whatsapp-floating-widget:hover .whatsapp-chat-bubble:not(.is-closed) {
     opacity: 1;
@@ -1718,20 +1719,23 @@ section[id] {
 
 /* Revelação do balão quando a classe active está presente e não está marcado como fechado */
 .whatsapp-chat-bubble.active:not(.is-closed) {
+  display: block !important;
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
   pointer-events: auto;
 }
 
-/* Estado forçado de fechamento: garante que o balão suma instantaneamente e ignore qualquer hover residual no mobile */
+/* Estado forçado de fechamento: oculta imediatamente via display none e remove interatividade */
 .whatsapp-chat-bubble.is-closed {
+  display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;
   transform: translateY(12px) scale(0.95) !important;
   pointer-events: none !important;
 }
 
+/* Cabeçalho do balão de mensagem */
 .chat-bubble-header {
   background: linear-gradient(135deg, #092040 0%, #061327 100%);
   padding: 0.875rem 1rem;
@@ -1780,10 +1784,12 @@ section[id] {
   border: 2px solid #08162b;
 }
 
+/* Metadados e identificação do advogado com proteção contra quebra de layout */
 .bubble-meta {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  min-width: 0; /* Previne expansão indesejada em telas estreitas */
 }
 
 .bubble-name {
@@ -1791,41 +1797,74 @@ section[id] {
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bubble-status {
   font-size: 0.6875rem;
   color: var(--blue-sky-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Botão de fechar balão (X) com área de toque touch-friendly, sem bordas e com foco acessível */
+/* Botão de fechar balão (X) otimizado especificamente para toque no iOS Safari e Android */
 .bubble-close-btn {
-  background: transparent;
-  border: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   outline: none;
-  color: var(--text-muted);
-  font-size: 1.5rem;
-  line-height: 1;
-  width: 36px;
-  height: 36px;
+  color: #e2e8f0;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 50%;
   padding: 0;
-  margin: -6px -6px -6px 0;
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  margin: 0;
+  position: relative;
+  z-index: 10;
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  z-index: 5;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-/* Efeito visual de foco e hover ao interagir com o botão de fechar */
+/* Expansão invisível da área de toque (+8px em todas as direções) para facilitar o clique no celular */
+.bubble-close-btn::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+}
+
+/* Ícone SVG interno do botão de fechar sem interceptar eventos de ponteiro */
+.bubble-close-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  pointer-events: none !important;
+  display: block;
+}
+
+/* Feedback visual imediato ao tocar ou passar o mouse no botão de fechar */
 .bubble-close-btn:hover,
 .bubble-close-btn:active {
-  color: var(--white);
-  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.6);
+  transform: scale(1.08);
 }
 
 .chat-bubble-body {
@@ -2164,6 +2203,7 @@ section[id] {
     text-align: center;
   }
 
+  /* Ajustes do botão flutuante e balão do WhatsApp em dispositivos móveis */
   .whatsapp-floating-widget {
     bottom: 1.25rem;
     right: 1.25rem;
@@ -2177,6 +2217,14 @@ section[id] {
   .whatsapp-chat-bubble {
     width: calc(100vw - 2.5rem);
     right: 0;
+  }
+
+  /* Desativação total de hover no mobile para evitar que o iOS mantenha o balão preso na tela */
+  .whatsapp-floating-widget:hover .whatsapp-chat-bubble:not(.active) {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
   /* Otimização da altura da foto do Dr. Enio em telas móveis */
   .about-img {
